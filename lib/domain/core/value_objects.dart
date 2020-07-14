@@ -9,6 +9,8 @@ abstract class ValueObject<T> {
   const ValueObject();
   // Either<left, right>
   Either<ValueFailure<T>, T> get value;
+  // Check for validation
+  bool isValid() => value.isRight();
 
   @override
   bool operator ==(Object o) {
