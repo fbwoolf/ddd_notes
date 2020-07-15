@@ -9,6 +9,7 @@
 .history
 .svn/
 NOTES.md
+google-services.json
 
 # IntelliJ related
 *.iml
