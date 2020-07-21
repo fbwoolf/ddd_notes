@@ -22,6 +22,11 @@ class FirebaseAuthFacade implements IAuthFacade {
   );
 
   @override
+  Future<Option<User>> getSignedInUser() => _firebaseAuth.currentUser().then(
+        (firebaseUser) => optionOf(firebaseUser?.toDomain()),
+      );
+
+  @override
   Future<Either<AuthFailure, Unit>> registerWithEmailAndPassword({
     @required EmailAddress emailAddress,
     @required Password password,
@@ -86,11 +91,6 @@ class FirebaseAuthFacade implements IAuthFacade {
       return left(const AuthFailure.serverError());
     }
   }
-
-  @override
-  Future<Option<User>> getSignedInUser() => _firebaseAuth.currentUser().then(
-        (firebaseUser) => optionOf(firebaseUser?.toDomain()),
-      );
 
   @override
   Future<void> signOut() => Future.wait([
