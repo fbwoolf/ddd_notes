@@ -20,6 +20,11 @@ abstract class ValueObject<T> {
     return value.fold((f) => throw UnexpectedValueError(f), id);
   }
 
+  // Used to convert all ValueFailure types into dynamic type
+  Either<ValueFailure<dynamic>, Unit> get failureOrUnit {
+    return value.fold((l) => left(l), (r) => right(unit));
+  }
+
   // Check for validation
   bool isValid() => value.isRight();
 

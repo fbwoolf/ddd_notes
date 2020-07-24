@@ -30,101 +30,111 @@ class SignInForm extends StatelessWidget {
         return Form(
           // bool to show error messages
           autovalidate: state.showErrorMessages,
-          child: ListView(
-            children: <Widget>[
-              const Text(
-                '📝',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 130),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.email),
-                  labelText: 'Email',
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              children: <Widget>[
+                const Text(
+                  '📝',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 130),
                 ),
-                autocorrect: false,
-                onChanged: (value) => context
-                    .bloc<SignInFormBloc>()
-                    // value is validated in the value object
-                    .add(SignInFormEvent.emailChanged(value)),
-                validator: (_) => context
-                    .bloc<SignInFormBloc>()
-                    .state
-                    .emailAddress
-                    .value
-                    .fold(
-                      (f) => f.maybeMap(
-                        invalidEmail: (_) => 'Invalid Email',
-                        orElse: () => null,
-                      ),
-                      (s) => null,
-                    ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.lock),
-                  labelText: 'Password',
+                const SizedBox(
+                  height: 8,
                 ),
-                autocorrect: false,
-                obscureText: true,
-                onChanged: (value) => context
-                    .bloc<SignInFormBloc>()
-                    // value is validated in the value object
-                    .add(SignInFormEvent.passwordChanged(value)),
-                validator: (_) =>
-                    context.bloc<SignInFormBloc>().state.password.value.fold(
-                          (f) => f.maybeMap(
-                            shortPassword: (_) => 'Short Password',
-                            orElse: () => null,
-                          ),
-                          (s) => null,
-                        ),
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: FlatButton(
-                      onPressed: () {
-                        context.bloc<SignInFormBloc>().add(
-                              const SignInFormEvent
-                                  .signInWithEmailAndPasswordPressed(),
-                            );
-                      },
-                      child: const Text('SIGN IN'),
-                    ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.email),
+                    labelText: 'Email',
                   ),
-                  Expanded(
-                    child: FlatButton(
-                      onPressed: () {
-                        context.bloc<SignInFormBloc>().add(
-                              const SignInFormEvent
-                                  .registerWithEmailAndPasswordPressed(),
-                            );
-                      },
-                      child: const Text('REGISTER'),
+                  autocorrect: false,
+                  onChanged: (value) => context
+                      .bloc<SignInFormBloc>()
+                      // value is validated in the value object
+                      .add(SignInFormEvent.emailChanged(value)),
+                  validator: (_) => context
+                      .bloc<SignInFormBloc>()
+                      .state
+                      .emailAddress
+                      .value
+                      .fold(
+                        (f) => f.maybeMap(
+                          invalidEmail: (_) => 'Invalid Email',
+                          orElse: () => null,
+                        ),
+                        (s) => null,
+                      ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.lock),
+                    labelText: 'Password',
+                  ),
+                  autocorrect: false,
+                  obscureText: true,
+                  onChanged: (value) => context
+                      .bloc<SignInFormBloc>()
+                      // value is validated in the value object
+                      .add(SignInFormEvent.passwordChanged(value)),
+                  validator: (_) =>
+                      context.bloc<SignInFormBloc>().state.password.value.fold(
+                            (f) => f.maybeMap(
+                              shortPassword: (_) => 'Short Password',
+                              orElse: () => null,
+                            ),
+                            (s) => null,
+                          ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: FlatButton(
+                        onPressed: () {
+                          context.bloc<SignInFormBloc>().add(
+                                const SignInFormEvent
+                                    .signInWithEmailAndPasswordPressed(),
+                              );
+                        },
+                        child: const Text('SIGN IN'),
+                      ),
                     ),
-                  )
-                ],
-              ),
-              RaisedButton(
+                    Expanded(
+                      child: FlatButton(
+                        onPressed: () {
+                          context.bloc<SignInFormBloc>().add(
+                                const SignInFormEvent
+                                    .registerWithEmailAndPasswordPressed(),
+                              );
+                        },
+                        child: const Text('REGISTER'),
+                      ),
+                    )
+                  ],
+                ),
+                RaisedButton(
                   onPressed: () {
                     context.bloc<SignInFormBloc>().add(
                           const SignInFormEvent.signInWithGooglePressed(),
                         );
                   },
                   color: Colors.lightBlue,
-                  child: const Text('SIGN IN WITH GOOGLE',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      )))
-            ],
+                  child: const Text(
+                    'SIGN IN WITH GOOGLE',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                if (state.isSubmitting) ...[
+                  const SizedBox(height: 8),
+                  const LinearProgressIndicator(value: null),
+                ],
+              ],
+            ),
           ),
         );
       },
