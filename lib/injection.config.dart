@@ -11,7 +11,10 @@ import 'package:injectable/get_it_helper.dart';
 
 import 'application/auth/auth_bloc.dart';
 import 'application/auth/sign_in_form/sign_in_form_bloc.dart';
+import 'application/notes/note_actor/note_actor_bloc.dart';
+import 'application/notes/note_watcher/note_watcher_bloc.dart';
 import 'domain/auth/i_auth_facade.dart';
+import 'domain/notes/i_note_repository.dart';
 import 'infrastructure/auth/firebase_auth_facade.dart';
 import 'infrastructure/core/firebase_injectable_module.dart';
 
@@ -25,6 +28,8 @@ void $initGetIt(GetIt g, {String environment}) {
   gh.lazySingleton<GoogleSignIn>(() => firebaseInjectableModule.googleSignIn);
   gh.lazySingleton<IAuthFacade>(
       () => FirebaseAuthFacade(g<FirebaseAuth>(), g<GoogleSignIn>()));
+  gh.factory<NoteActorBloc>(() => NoteActorBloc(g<INoteRepository>()));
+  gh.factory<NoteWatcherBloc>(() => NoteWatcherBloc(g<INoteRepository>()));
   gh.factory<SignInFormBloc>(() => SignInFormBloc(g<IAuthFacade>()));
   gh.factory<AuthBloc>(() => AuthBloc(g<IAuthFacade>()));
 }
