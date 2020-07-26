@@ -4,6 +4,7 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,6 +18,7 @@ import 'domain/auth/i_auth_facade.dart';
 import 'domain/notes/i_note_repository.dart';
 import 'infrastructure/auth/firebase_auth_facade.dart';
 import 'infrastructure/core/firebase_injectable_module.dart';
+import 'infrastructure/notes/note_repository.dart';
 
 /// adds generated dependencies
 /// to the provided [GetIt] instance
@@ -28,6 +30,7 @@ void $initGetIt(GetIt g, {String environment}) {
   gh.lazySingleton<GoogleSignIn>(() => firebaseInjectableModule.googleSignIn);
   gh.lazySingleton<IAuthFacade>(
       () => FirebaseAuthFacade(g<FirebaseAuth>(), g<GoogleSignIn>()));
+  gh.lazySingleton<INoteRepository>(() => NoteRepository(g<Firestore>()));
   gh.factory<NoteActorBloc>(() => NoteActorBloc(g<INoteRepository>()));
   gh.factory<NoteWatcherBloc>(() => NoteWatcherBloc(g<INoteRepository>()));
   gh.factory<SignInFormBloc>(() => SignInFormBloc(g<IAuthFacade>()));

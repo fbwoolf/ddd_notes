@@ -1,5 +1,6 @@
 import 'package:ddd_notes/domain/core/failures.dart';
-import 'package:flutter/semantics.dart';
+
+class NotAuthenticatedError extends Error {}
 
 class UnexpectedValueError extends Error {
   final ValueFailure valueFailure;
